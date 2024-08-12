@@ -8,7 +8,7 @@
 
 <meta name="author" content="David J. Stokes | Teaching Coordinator | Data Science Academy">
 
-<title>Data Bootcamp - Introduction</title>
+<title>Day 1 Summary</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,16 +24,16 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="RBCday1_1_files/libs/clipboard/clipboard.min.js"></script>
-<script src="RBCday1_1_files/libs/quarto-html/quarto.js"></script>
-<script src="RBCday1_1_files/libs/quarto-html/popper.min.js"></script>
-<script src="RBCday1_1_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="RBCday1_1_files/libs/quarto-html/anchor.min.js"></script>
-<link href="RBCday1_1_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="RBCday1_1_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="RBCday1_1_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="RBCday1_1_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="RBCday1_1_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="RBCday1_summary_files/libs/clipboard/clipboard.min.js"></script>
+<script src="RBCday1_summary_files/libs/quarto-html/quarto.js"></script>
+<script src="RBCday1_summary_files/libs/quarto-html/popper.min.js"></script>
+<script src="RBCday1_summary_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="RBCday1_summary_files/libs/quarto-html/anchor.min.js"></script>
+<link href="RBCday1_summary_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="RBCday1_summary_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="RBCday1_summary_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="RBCday1_summary_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="RBCday1_summary_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -46,12 +46,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#rstudio-file-types" id="toc-rstudio-file-types" class="nav-link active" data-scroll-target="#rstudio-file-types">RStudio File Types</a></li>
-  <li><a href="#data-science-workflows" id="toc-data-science-workflows" class="nav-link" data-scroll-target="#data-science-workflows">Data Science Workflows</a>
-  <ul class="collapse">
-  <li><a href="#workshop-project" id="toc-workshop-project" class="nav-link" data-scroll-target="#workshop-project">Workshop project</a></li>
-  <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a></li>
-  </ul></li>
+  <li><a href="#todays-concepts" id="toc-todays-concepts" class="nav-link active" data-scroll-target="#todays-concepts">Today’s Concepts</a></li>
   </ul>
 </nav>
 </div>
@@ -59,7 +54,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data Bootcamp - Introduction</h1>
+<h1 class="title">Day 1 Summary</h1>
 </div>
 
 
@@ -82,121 +77,53 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="rstudio-file-types" class="level2">
-<h2 class="anchored" data-anchor-id="rstudio-file-types">RStudio File Types</h2>
+<section id="todays-concepts" class="level2">
+<h2 class="anchored" data-anchor-id="todays-concepts">Today’s Concepts</h2>
 <ul>
-<li>Before we move on to data science programming, let’s briefly discuss RStudio file types, with a focus on <code>quarto</code> documents. …</li>
-</ul>
-<p><strong>📊 Task 1.2</strong></p>
-<ol type="1">
-<li>Take two minutes to complete the following:</li>
-</ol>
+<li>Setting up an environment
 <ul>
-<li>go to <code>File</code> -&gt; <code>New File</code> -&gt; <code>Quarto Document</code></li>
-<li>select <code>Create</code>
-<ul>
-<li>an untitled quarto document with default content should appear in your editor window.</li>
+<li>features of the RStudio IDE</li>
+<li>Creating an R project</li>
 </ul></li>
-<li>read the default information
+<li>Big picture concepts
 <ul>
-<li>click the green “play” buttons and observe what happens</li>
+<li>data science workflows</li>
+<li>reproducibility</li>
 </ul></li>
-</ul>
-<ol start="2" type="1">
-<li>Based on what you read, what can you do in a quarto document?</li>
-</ol>
-<p><strong>[Your answer goes here]</strong></p>
+<li>Loading packages
 <ul>
-<li><p>Let’s return to our untitled example doc and discuss a few other features.</p></li>
-<li><p>Now let’s discuss a few big picture concepts…</p></li>
-</ul>
-</section>
-<section id="data-science-workflows" class="level2">
-<h2 class="anchored" data-anchor-id="data-science-workflows">Data Science Workflows</h2>
+<li>tidyverse</li>
+</ul></li>
+<li>Data types &amp; data structures
 <ul>
-<li>What comes to mind when you consider what a data science workflow might entail?</li>
-</ul>
-<p>💬 Please discuss with two others nearby.</p>
+<li>numeric, charactor</li>
+<li>factors, vectors, matrices, dataframes and tibbles</li>
+</ul></li>
+<li>Reading in data
 <ul>
-<li>Here is an example of a data science workflow, from Lee et al.&nbsp;(2022):</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="DataSciWorkflow.png" class="img-fluid figure-img"></p>
-<figcaption>Data Science Workflow</figcaption>
-</figure>
-</div>
+<li>read_csv from the dplyr package</li>
+</ul></li>
+<li>Base functions &amp; dplyr (tidyverse) functions
 <ul>
-<li><p>What do you notice about the data science process presented here? How does it align with your experience and/or thoughts about a data science workflow?</p></li>
-<li><p>Data science processes…</p>
+<li>dim(), colnames(), as.factor()</li>
+</ul></li>
+<li>Data moves (subseting, filtering, calculating)
 <ul>
-<li>Involve data</li>
-<li>May be iterative or cyclical</li>
-<li>May involve collaboration</li>
-<li>Should be reproducible and well documented</li>
+<li>bracket notation</li>
+<li>select(), filter(), mutate()</li>
+</ul></li>
+<li>Operators
+<ul>
+<li>assign, extract, pipe, multiplication (vectorization)</li>
+</ul></li>
+<li>Project step 1
+<ul>
+<li>selecting a dataset</li>
+<li>creating summaries</li>
+<li>crearing a data dictionary</li>
+<li>tracking processes</li>
 </ul></li>
 </ul>
-<section id="workshop-project" class="level3">
-<h3 class="anchored" data-anchor-id="workshop-project">Workshop project</h3>
-<ul>
-<li>In this workshop, you will produce a project with the following components:</li>
-</ul>
-<ol type="1">
-<li>A data dictionary &amp; data summaries
-<ul>
-<li>why you chose your dataset, what is relevant (to you or others) about the dataset and/or what interests you about the dataset</li>
-<li>the data source, data description, dimensions, variables (ranges, levels, units), potential use cases, and other important information about the data that would be helpful for yourself and others</li>
-</ul></li>
-<li>Specification of a data investigation/research question
-<ul>
-<li>your hypotheses and/or what you expect to find</li>
-</ul></li>
-<li>Trends or models, and visualizations
-<ul>
-<li>related to the data investigation of interest</li>
-<li>assumptions, limitations</li>
-</ul></li>
-<li>Contextual Interpretations
-<ul>
-<li>contextual presentation of results &amp; interpretations</li>
-<li>what’s missing from the data and/or what you would add</li>
-<li>next steps</li>
-</ul></li>
-<li>What you’ll take forward from this experience and/or what else you’d like to know.</li>
-</ol>
-<p><em>While tracking your process/data science workflow throughout, with the following key concepts in mind.</em></p>
-</section>
-<section id="reproducibility" class="level3">
-<h3 class="anchored" data-anchor-id="reproducibility">Reproducibility</h3>
-<ul>
-<li><p>Can you reproduce the results of a given data investigation? Furthermore, can you provide someone else with a roadmap for reproducing your process and results?</p></li>
-<li><p>This is what we will do and in your project this will be a focus of our programming practices.</p></li>
-</ul>
-<blockquote class="blockquote">
-<p>Summary of additional project criteria: Make your process reproducible via good programming practices, including code comments.</p>
-</blockquote>
-<section id="code-comments" class="level4">
-<h4 class="anchored" data-anchor-id="code-comments">Code comments</h4>
-<ul>
-<li><p>Code comments are a great way to facilitate reproducibility, collaboration, organization, and understanding in the data investigations programming process.</p>
-<ul>
-<li>NOTE: How you specify a comment may depend on the file type that you’re using, but RStudio has features to help you with this.</li>
-<li>Regardless, we’ll focus on code comments that can be made in the same space as executable code.</li>
-</ul></li>
-</ul>
-<p><strong>📊 Task 1.3</strong></p>
-<ol type="1">
-<li>Go to the “Code” in the task bar and scroll down to the “Comment/Uncomment Lines” option.</li>
-</ol>
-<ul>
-<li>In the space below, list the shortcut to comment or uncomment a line.</li>
-</ul>
-<p><strong>[Your answer goes here]</strong></p>
-<blockquote class="blockquote">
-<p>Summary of additional project criteria: Create informative and explanatory code comments throughout your coding process.</p>
-</blockquote>
-</section>
-</section>
 </section>
 
 </main>

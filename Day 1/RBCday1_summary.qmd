@@ -1,0 +1,47 @@
+---
+title: "Day 1 Summary"
+author: David J. Stokes | Teaching Coordinator | Data Science Academy
+format: 
+  html:
+    theme: cerulean
+    toc: true
+editor: visual
+---
+
+## Today's Concepts
+
+-   Setting up an environment 
+    - features of the RStudio IDE
+    - Creating an R project
+
+-   Big picture concepts
+    - data science workflows
+    - reproducibility
+
+-   Loading packages
+    - tidyverse
+    
+-   Data types & data structures
+    - numeric, charactor
+    - factors, vectors, matrices, dataframes and tibbles
+    
+-   Reading in data
+    - read_csv from the dplyr package
+    
+-   Base functions & dplyr (tidyverse) functions
+    - dim(), colnames(), as.factor()
+
+-   Data moves (subseting, filtering, calculating)
+    - bracket notation
+    - select(), filter(), mutate()
+    
+-   Operators
+    - assign, extract, pipe, multiplication (vectorization)
+
+-   Project step 1
+    - selecting a dataset
+    - creating summaries
+    - crearing a data dictionary
+    - tracking processes
+    
+

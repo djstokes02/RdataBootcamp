@@ -1,0 +1,236 @@
+---
+title: "R Basics 2"
+author: David J. Stokes | Teaching Coordinator | Data Science Academy
+format: 
+  html:
+    theme: cerulean
+    toc: true
+editor: visual
+---
+
+## Data Summaries & Data Processing
+
+-   Let's read in the `College` dataset again. Recall, `read_csv` creates Tibbles by default.
+
+```{r, message=FALSE}
+library(readr) #included in the tidyverse
+College <- read_csv("College.csv")
+```
+
+### Dataset Summaries
+
+-   Base R has a useful `summary()` that we can run on Tibbles.
+
+```{r}
+summary(College)
+```
+
+-   Notice that we get a `five number summary` (and the mean value) for each of the quantitative variables. However, the summary for the variable `Private` isn't very informative.
+
+### Extracting Variables of Interest
+
+-   We previously saw that we can access rows and columns of a dataset with bracket notation `datasetName[row-subset, column-subset]`.
+
+-   Another way to reference columns of a dataset (storred as a Tibble, or dataframe) is to use the `$` operator. The `$` allows you to extract or replace information in an object such as a Tibble.
+
+-   Let's use the `$` operator to take a closer look at the variable `Private`.
+
+```{r}
+## Here, I'm looking at the first five entries of 
+# the variable "Private" in the "College" dataset
+College$Private[1:5]
+
+# NOTE, that "1:5" is the same as c(1,2,3,4,5)
+```
+
+-   We can also use the `summary()` function on a single variable.
+
+```{r}
+summary(College$Private)
+```
+
+-   We get the same (not very useful) output.
+
+#### Changing Variable Types
+
+The variable `Private` contains information on whether or not the institution (represented as a row in the dataset) is a private or not. The possible values are either "yes" or "no". Ideally, we would recieve this information through a `data dictionary` that was associated with the `College` dataset, but we may not necessarily know this. However, with this information, we can treat this variable as a `factor`.
+
+-   a **factor** is a categorical variable that contains `levels`. For example, we might have `color` as a variable in our dataset, and the levels my be `red`, `orange`, `yellow`...
+
+-   In R, we can change a character to a factor with the `as.factor()` function. Let's use the code below to do this.
+
+```{r}
+# Here we will replace the character variable `Private` 
+# with the factor version.
+
+College$Private <- as.factor(College$Private)
+
+```
+
+**📊 Task 1.9**
+
+1)  In the code below, run the `summary()` function on the variable `Private` from the `College` dataset and in the space below the code, comment on the output and what you think the summary function returns when applied to factor variables.
+
+```{r}
+#[Your code and comments go in this code chunk]
+
+```
+
+**\[Your answer goes here\]**
+
+2)  In the code below, run the `levels()` function on the same variable and comment on what you think this function does for factor variables.
+
+```{r}
+#[Your code and comments go in this code chunk]
+
+```
+
+**\[Your answer goes here\]**
+
+#### Subsetting data
+
+-   We can also use bracket notation to get a data subset of interest.
+-   Let's use this method to get three columns of interest, consisting only of institutions labeled as private.
+-   NOTE: Read the code comments (as you have done so far, for more details)
+
+**Step 1**
+
+-   Getting columns of interest
+
+```{r}
+# gets variables in position 2, 18, and 19
+# I know the positions of the columns of interest 
+# from using the colnames() function.
+
+College_subset <-  College[,c(2,18,19)]
+
+```
+
+**Step 2**
+
+-   Getting observations of interest
+
+> NOTE: Rows in a dataset may be referred to as "observations." Dataset columns are often called "variables" or in machine learning contexts, may be referred to as "features."
+
+```{r}
+# Here we specify a logical condition, that if met will generate 
+# the value "TRUE". Adding this list of trues and falses to the 
+# rows will remove the values that don't meet the condition 
+# (i.e., drop where condition=FALSE).
+
+# update College_subset to consist only of rows that represent 
+# private institutions.
+
+College_subset <- College_subset[College_subset$Private == "Yes", ]
+
+# NOTE: I know the condition I'm looking for (Private == "Yes") 
+# from understanding the levels in this variable and what the 
+# values represent (e.g., from a data dictionary)
+
+summary(College_subset)
+```
+
+**Combining steps**
+
+-   Now, there was really no need to make this subset in two separate steps. We could have done this in one line
+
+```{r}
+
+College_subset2 <- College[College$Private == "Yes", c(2,18,19)]
+
+# gets the rows where Private status has the value "Yes" and 
+# the variables corresponding to positions 2, 18, and 19 
+# (Private, Expend, Grad.Rate).
+
+summary(College_subset2)
+```
+
+### Using dplyr (from the tidyverse)
+
+-   One of the neat things about R is that there are many ways to accomplish a particular task.
+
+-   (As an alternative or compliment to processing data in base R) The `dplyr` package within the `tidyverse` is designed to facilitate data processing and, as such, has many useful built in functions. (Aside: I like to use base R for data processing since I feel like I get a better understanding of the data structure using the base functions, but would recommend using tidyverse packages like dplyr for simplifying your code and for collaboration. So, I'd say to use both methods!)
+
+-   One of the most important operators to know about when using the dplyr package (and for simplifying code) is the `pipe` operator `%>%`. This operator allows you to chain together several operations in a short bit of code. As well, you can often go back and modify your process more easily than running each step independently.
+
+-   This also helps to prevent errors that may arise from having to create several new data subsets or overwriting datasets with different information.
+
+-   The tidyverse functions are also optimized for speed and can perform much better on large datasets than many equivalent base R methods.
+
+-   Let's use the dplyr package to create the same subset from the College dataset.
+
+```{r}
+library(dplyr) #part of the tidyverse
+
+College_subset3 <- 
+  College %>%
+  select(Private, Expend, Grad.Rate) %>%
+  filter(Private == "Yes") %>% 
+  mutate(Private = as.factor(Private)) 
+
+summary(College_subset3)
+```
+
+**📊 Task 1.10**
+
+1)  Do you think we got the subset of interest? If so, explain why you think so or if not, explain why you think not.
+
+**\[Your answer goes here\]**
+
+2)  In the code chunk below, use any method of preference (base R or dplyr functions) to find a subset of the College dataset that seems interesting to you.
+
+-   Run a summary on the data.
+-   In the space below your code, describe what you were aiming to do and how you accomplished it through your code (NOTE: add code explanations with comments).
+
+```{r}
+#[Your code and comments go in this code chunk]
+
+```
+
+**\[Your answer goes here\]**
+
+## Project Step 1
+
+-   **Either individually, or in a group of up to 3**
+
+-   **Create a new Quarto document entitled "Project_s1_[unityID(s)]"**
+
+1)  Find a dataset
+
+- Dataset Criteria
+    - At least 200 observations and 5 variables
+    - at least one variable of quantitative type and at least one variable of categorical type (NOTE: you can create new variables, e.g., categorizing scores into "high," "medium," and "low").
+    - 
+  
+2)  In your `Project_s1` document: Describe why you chose the dataset, and why it is relevant and/or of interest to you.
+    -   Describe what you already know about the context from which the data arises? Or what you would like to know.
+
+-   Explore metadata and basic summaries (with code and related comments)
+
+2)  Build your data dictionary.
+
+-   source of data
+-   description of data
+-   dimensions
+-   variables and types
+    -   units of measurement
+    -   description of factor levels
+    -   data ranges
+-   potential uses of the data
+-   other useful information
+
+> *Create summary statistics*
+>
+> *Track your data processing steps*
+
+## Resources
+
+[Base R Cheatsheet](https://iqss.github.io/dss-workshops/R/Rintro/base-r-cheat-sheet.pdf) [Data Wrangling Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
+
+**Dataset Options**
+
+-   Use your own resource
+-   [ISLR Website](https://www.statlearning.com/resources-second-edition) (see "Data Sets")
+-   [Kaggle datasets](https://www.kaggle.com/datasets)
+-   [Local government datasets](https://github.com/varundeepakgudhe/Data_Science_Academy/tree/main/Datasets)
+-   [Other Resources](https://docs.google.com/document/d/1oLPoCZsycGN1NVIiiJ-ESIBswO2GQ7mwfuXfuTK_Pns/edit?usp=sharing)

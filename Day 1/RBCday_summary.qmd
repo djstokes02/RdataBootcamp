@@ -1,0 +1,15 @@
+---
+title: "Day 1 Summary"
+author: David J. Stokes | Teaching Coordinator | Data Science Academy
+format: 
+  html:
+    theme: cerulean
+    toc: true
+editor: visual
+---
+
+ - Read in data
+ - base functions, dplyr (tidyverse) functions
+ - Data types & data structures
+ - Operatores: assign, pipe
+ - data moves (subseting, filtering)

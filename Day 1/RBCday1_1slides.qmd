@@ -1,0 +1,114 @@
+---
+title: "Data Bootcamp"
+format: 
+  revealjs:
+    theme: blood
+editor: visual
+---
+
+## Welcome!
+
+Welcome to the data bootcamp!
+
+Please tell us...
+
+-   Your name
+-   One thing you're looking forward to in your grad program, and
+
+complete the sentence:
+
+-   If I competed in the Olympics, my event would be...
+    -   (you can include why if you'd like)
+
+## Agenda (Day 1)
+
+Today, we will:
+
+-   Preview the week's activities (RBCschedule)
+-   Discuss course goals & objectives
+-   Setup our environment
+
+## Course Goals & Objectives
+
+::: panel-tabset
+### Overview
+
+This course is designed to offer a collaborative experience in data science processes using the R programming language and the RStudio platform. You will have the opportunity to work with your cohort mates on data-driven project-based programming, as you prepare for your graduate studies journey. This course is interactive and questions and comments are encouraged and highly recommended in facilitation of a meaningful experience, regardless of you prior programming skillset.
+
+### Objectives
+
+At the end of this bootcamp, you will be able to:
+
+-   Develop and document data analysis plans
+-   Collaborate in a team oriented setting
+-   Communicate reproducible workflows and insights from a data investigation, using visualizations and machine learning techniques
+:::
+
+## Environment
+
+-   Let's open up RStudio
+    -   NOTE: You may want to add the RStudio icon to your desktop
+
+## The RStudio IDE
+
+::: columns
+::: {.column width="70%"}
+![RStudio](RStudio_image.png)
+:::
+
+::: {.column width="30%"}
+Four typical windows
+
+-   editor
+-   console
+-   environment...
+-   files...
+:::
+:::
+
+## Our focus in RStudio
+
+-   The windows in RStudio are customizable by accessing the `Panes Layout` within `View` in the taskbar. In the default settings we will focus on the `editor` and the `console`.
+-   Take two minutes to explore the various tabs in the other windows.
+    -   Any ideas about what will appear in our environment?
+    -   What do you imagine the `import` wizard does?
+
+## Questions
+
+-   What else are you wondering about the RStudio IDE?
+-   Any comments or concerns?
+
+## Organization
+
+::: panel-tabset
+### Overview
+
+-   Organization is a fundamental part of any effective workflow, and for just about any data-driven project, there will be a need to access data and materials.
+-   We'll create a common organizational structure so that we can easily access the materials we need for a given task.
+
+Let's keep it simple and take advantage of our computer's built-in organizational system.
+
+### 📊 Task 1.1a
+
+In RStudio, let's create an R project:
+
+-   go to File and New Project.
+-   select "existing directory"
+-   select your location of preference and name the folder `Rbootcamp`
+
+### 📊 Task 1.1b
+
+-   go to the [Course Materials google folder](https://drive.google.com/drive/folders/1FmYRijn9TOu241Nn3uwGXqOe7g08ijB6?usp=drive_link)
+-   download the `Day 1` folder
+-   save the materials in your Rbootcamp folder
+
+### 📊 Task 1.1c
+
+-   (in RStudio) go to your `Files` tab and verify that the `Day 1` folder and files appear.
+-   Find `RBCday1_1.qmd` in your Files tab and click to open
+    -   NOTE: Upon opening `RBCday1_1.qmd` should appear within your editor window.
+:::
+
+## On to RStudio
+
+-   Now, let's transition from viewing the slide deck to working in RStudio together.

@@ -1,0 +1,262 @@
+---
+title: "R Basics"
+author: David J. Stokes | Teaching Coordinator | Data Science Academy
+format: 
+  html:
+    theme: cerulean
+    toc: true
+editor: visual
+---
+
+# R Data Types & Structure
+
+-   Let's begin with some introductory R programming concepts; data types and data structures.
+
+-   As we move through this lesson, run the code in the code chunks, observe and consider the output, and complete the tasks.
+
+## Data Types
+
+-   Let's discuss a few R data types that are typical in the data science programming process:
+
+### Numeric
+
+-   this is the default quantitative data type in R
+    -   Examples include: `4`, `pi`, `10e-4`, `2423.2`
+
+> NOTE: You can assign a value to an object/variable that you can later reference (or call) by name using the arrow `<-`
+
+```{r}
+# (in R, variable names are flexible but are case sensitive)
+num1 <- 4 # Here I'm storing the value 4 in an object called num1
+num.2 <- pi
+num_3 <- 10e-4
+Num4 <- 2423.2
+```
+
+> NOTE: You can perform numerical operations on numerical values (see the examples below)
+
+```{r}
+num1 + num.2 #4 + pi
+
+num_3*Num4 #10e-4*2423.2
+# NOTE: 10e-4 is scientific notation for 10*10^(-4) or 10^-3
+```
+
+**📊 Task 1.4**
+
+-   In the code chunk below:
+
+1)  multiply `num_3` by `10^3` and display the result.
+
+2)  try another calculation using at least three of the variables `num1`, `num.2`, `num_3`, or `Num4`, and display the results.
+
+```{r}
+# [Your code and comments go in this code chunk] 
+# (Hint: it can be useful to copy and paste)
+
+```
+
+### Character
+
+-   this is the default data type for strings and text data
+    -   Examples include: `"words & phrases"`, `"RED"`, `"756"`
+
+```{r}
+
+charA <- "Hello"
+charB <- "I am"
+charC <- "[your name goes here]"
+
+## In R, you can pass objects to a function. Here is an example using the paste() function, with charA, charB, and charC
+paste(charA, charB, charC)
+```
+
+**📊 Task 1.5**
+
+1)  Run the code below:
+
+```{r}
+a <- "1"
+b <- "2"
+
+a
+b
+```
+
+2)  in the code chunk below, try a + b and describe what happens and why you think this happened.
+
+```{r}
+#[Your code and comments go in this code chunk] 
+```
+
+**\[Your answer goes here\]**
+
+3)  go back to the code chunk above and comment out the line where you added `a` and `b`.
+
+### Logical
+
+-   this data type represents boolean values
+    -   Example include: `TRUE` and `FALSE`
+
+```{r}
+# Logicals tell us if the conditions are met
+
+2 + 2 == 4 
+
+7 < 6 
+
+```
+
+## Data Structures
+
+### Vectors
+
+-   Vectors are one-dimensional data structures that contain the same type. For example, you can have a numerical vector consisting of numeric data types or a character vector consisting of character data types.
+
+```{r}
+
+# the c() function "combines" elements (separated by commas) into a vector.
+even_vec <- c(2,4,6,8,10)
+
+odd_vec <- even_vec - 1
+
+#NOTE: you can perform operations to each element of a vector (vectorization) without needing to iterate through each element.
+```
+
+**📊 Task 1.6**
+
+1)  In the code chunk below, create one numeric vector and one character vector, each consisting of at least two components and name & store them in new objects.
+
+```{r}
+#[Your code and comments go in this code chunk]
+
+```
+
+2)  In the code chunk below, perform a calculation on your numeric vector that transforms the elements of the vector and run the code to display the results.
+
+```{r}
+#[Your code and comments go in this code chunk]
+```
+
+3)  In the code chunk below, access and display the second element of your character vector using the following bracket notation `vectorName[element position]` (e.g., even_vec\[2\]).
+
+```{r}
+#[Your code and comments go in this code chunk]
+
+```
+
+4)  Use the c() function to combine the second element of your character vector with the second element of your numeric vector, then name & save this as a new object.
+    -   Run the code and display the results of your new object.
+    -   Describe the new object in the space below the code (i.e., what type of vector is this new object?).
+
+```{r}
+#[Your code and comments go in this code chunk]
+
+#HINT-example NewVec <- c(OldNumVec[2], OldCharVec[2])
+
+```
+
+**\[Your answer goes here\]**
+
+### Matrices
+
+-   Matrices are two-dimensional R objects that contain data of the same type.
+    -   Like vectors, matrices can be character or numeric, but not both.
+-   Let's build some example matrices
+
+```{r}
+
+# numeric matrix.. Notice that the option "byrow" has been set to TRUE
+frst_mtrx <- matrix(c(1,2,3,
+                      4,5,6,
+                      7,8,9,
+                      10,11,12), nrow = 4, ncol = 3, byrow = TRUE)
+
+char.mat <- matrix(c("I","I",
+                     "Love", "Love",
+                     "Double", "Double",
+                     "Chex", "Chex"), nrow = 4, ncol = 2, byrow=TRUE)
+
+
+```
+
+**📊 Task 1.7**
+
+-   In the code chunk below:
+
+1)  modify `frst_mtrx` by deleting the `byrow` option and save this as a new object called `scnd_mtrx`.
+
+2)  use the `colSums()` function on `scnd_mtrx`, run the code to display the results, and describe what this function does (in the space below the code chunk).
+
+```{r}
+#[Your code and comments go in this code chunk] 
+
+```
+
+**\[Your answer goes here\]**
+
+3)  What do you think would happen to the matrix type of `frst_mtrx` if we replaced a row in `frst_mtrx` with a row of `char.mat`? (HINT: what happened to the vector type when we added a character value to our numeric vector?)
+
+**\[Your answer goes here\]**
+
+4)  You can access components of a matrix (or other two dimensional R object, like Tibbles and Dataframes) using bracket notation, e.g., `MatrixName[row location, column location]`.
+
+-   To access an entire row, you can use `MatrixName[row location, ]`
+-   To access an entire column, you can use `MatrixName[ ,column location]`
+
+In the code chunk below, display the first row of `frst_mtrx`, and then multiply this row by 2 and show the results.
+
+```{r}
+#[Your code and comments go in this code chunk]
+```
+
+### Dataframes & Tibbles
+
+-   Finally, we've arrived at the data structures for data science. Dataframes and Tibbles are two-dimensional data structures that can contain different data types in different columns. Typical dataset processing will be done using these objects (e.g., subsetting, visualizations, modeling, etc.)
+
+-   Tibbles are structures in the `tidyverse` (a collection of useful packages) and were created to be upgrades to dataframes, but are otherwise very similar.
+
+-   To explore Tibbles we will read in a dataset that will have this structure by default.
+
+**📊 Task 1.8**
+
+1)  run the code below to read in the 'College.csv' data
+
+```{r, message=FALSE}
+library(readr) #included in the tidyverse
+College <- read_csv("College.csv")
+```
+
+2)  In the code chunk below, use the `dim()` function and the `colnames()` function on the College dataset.
+    -   Run the results, and below your code describe what these functions do. (HINT: you can type `?dim`, or `?colnames` to bring up the R documentation on these functions in the Help window).
+
+```{r}
+#[Your code and comments go in this code chunk]
+
+```
+
+**\[Your answer goes here\]**
+
+3)  In the code chunk below use the `head()` function on the College dataset, run the code, and below your code describe the information that is given.
+
+```{r}
+#[Your code and comments go in this code chunk]
+
+```
+
+**\[Your answer goes here\]**
+
+4)  Finally, use the `as.data.frame()` function on the College dataset and store the results in an object called `df_college`.
+    -   Run the `str()` function on `df_college`, display and describe the results. (You may also try the other functions on `df_college` for comparison).
+
+```{r}
+#[Your code and comments go in this code chunk]
+
+```
+
+**\[Your answer goes here\]**
+
+| 
+| 
+| 
+| 

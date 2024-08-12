@@ -207,7 +207,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <section id="changing-variable-types" class="level4">
 <h4 class="anchored" data-anchor-id="changing-variable-types">Changing Variable Types</h4>
-<p>The variable <code>Private</code> contains information on whether or not the institution (represented as a row in the dataset) is a private or not. The possible values are either “yes” or “no”. Ideally, we would recieve this information through a <code>data dictionary</code> that was associated with the <code>College</code> dataset, but we may not necessarily know this. However, with this information, we can treat this variable as a <code>factor</code>.</p>
+<p>The variable <code>Private</code> contains information on whether or not the institution (represented as a row in the dataset) is a private institution or not. The possible values are either “yes” or “no”. Ideally, we would receive this information through a <code>data dictionary</code> that was associated with the <code>College</code> dataset, but in general we may not necessarily know all of the information about a particular dataset or variable. However, since we know about the variable, we can appropriately treat it as a <code>factor</code>.</p>
 <ul>
 <li><p>a <strong>factor</strong> is a categorical variable that contains <code>levels</code>. For example, we might have <code>color</code> as a variable in our dataset, and the levels my be <code>red</code>, <code>orange</code>, <code>yellow</code>…</p></li>
 <li><p>In R, we can change a character to a factor with the <code>as.factor()</code> function. Let’s use the code below to do this.</p></li>
@@ -220,7 +220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>📊 Task 1.9</strong></p>
 <ol type="1">
-<li>In the code below, run the <code>summary()</code> function on the variable <code>Private</code> from the <code>College</code> dataset and in the space below the code, comment on the output and what you think the summary function returns when applied to factor variables.</li>
+<li>In the code below, run the <code>summary()</code> function on the variable <code>Private</code> from the <code>College</code> dataset, and in the space below the code, comment on the output and what you think the summary function returns when applied to factor variables.</li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#[Your code and comments go in this code chunk]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -239,7 +239,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>We can also use bracket notation to get a data subset of interest.</li>
 <li>Let’s use this method to get three columns of interest, consisting only of institutions labeled as private.</li>
-<li>NOTE: Read the code comments (as you have done so far, for more details)</li>
+<li>NOTE: Read the code comments (as you have done so far) for more details</li>
 </ul>
 <p><strong>Step 1</strong></p>
 <ul>
@@ -361,7 +361,7 @@ Attaching package: 'dplyr'</code></pre>
 <li>In the code chunk below, use any method of preference (base R or dplyr functions) to find a subset of the College dataset that seems interesting to you.</li>
 </ol>
 <ul>
-<li>Run a summary on the data.</li>
+<li>Run a summary on your subset.</li>
 <li>In the space below your code, describe what you were aiming to do and how you accomplished it through your code (NOTE: add code explanations with comments).</li>
 </ul>
 <div class="cell">
@@ -373,7 +373,7 @@ Attaching package: 'dplyr'</code></pre>
 <section id="project-step-1" class="level2">
 <h2 class="anchored" data-anchor-id="project-step-1">Project Step 1</h2>
 <ul>
-<li><p><strong>Either individually, or in a group of up to 3</strong></p></li>
+<li><p><strong>Either individually, or in a group of up to 3…</strong></p></li>
 <li><p><strong>Create a new Quarto document entitled “Project_s1_[unityID(s)]”</strong></p></li>
 </ul>
 <ol type="1">
@@ -383,21 +383,23 @@ Attaching package: 'dplyr'</code></pre>
 <li>Dataset Criteria
 <ul>
 <li>At least 200 observations and 5 variables</li>
-<li>at least one variable of quantitative type and at least one variable of categorical type (NOTE: you can create new variables, e.g., categorizing scores into “high,” “medium,” and “low”).</li>
-<li></li>
+<li>at least one variable of quantitative type and at least one variable of categorical type (NOTE: you can create new variables, e.g., categorizing quatitative “scores” into “high,” “medium,” and “low”).</li>
 </ul></li>
 </ul>
 <ol start="2" type="1">
 <li>In your <code>Project_s1</code> document: Describe why you chose the dataset, and why it is relevant and/or of interest to you.
 <ul>
-<li>Describe what you already know about the context from which the data arises? Or what you would like to know.</li>
+<li>Describe what you already know about the context from which the data arises, or what you would like to know.</li>
 </ul></li>
 </ol>
 <ul>
-<li>Explore metadata and basic summaries (with code and related comments)</li>
+<li>Explore metadata and basic summaries (with code and related comments)
+<ul>
+<li>You can use the functions we’ve covered and others</li>
+</ul></li>
 </ul>
 <ol start="2" type="1">
-<li>Build your data dictionary.</li>
+<li>Build your data dictionary that should include:</li>
 </ol>
 <ul>
 <li>source of data</li>
@@ -419,7 +421,13 @@ Attaching package: 'dplyr'</code></pre>
 </section>
 <section id="resources" class="level2">
 <h2 class="anchored" data-anchor-id="resources">Resources</h2>
-<p><a href="https://iqss.github.io/dss-workshops/R/Rintro/base-r-cheat-sheet.pdf">Base R Cheatsheet</a> <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">Data Wrangling Cheatsheet</a></p>
+<ul>
+<li><a href="https://iqss.github.io/dss-workshops/R/Rintro/base-r-cheat-sheet.pdf">Base R Cheatsheet</a></li>
+</ul>
+<!-- -->
+<ul>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">Data Wrangling Cheatsheet</a></li>
+</ul>
 <p><strong>Dataset Options</strong></p>
 <ul>
 <li>Use your own resource</li>

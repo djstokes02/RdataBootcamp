@@ -53,7 +53,7 @@ summary(College$Private)
 
 #### Changing Variable Types
 
-The variable `Private` contains information on whether or not the institution (represented as a row in the dataset) is a private or not. The possible values are either "yes" or "no". Ideally, we would recieve this information through a `data dictionary` that was associated with the `College` dataset, but we may not necessarily know this. However, with this information, we can treat this variable as a `factor`.
+The variable `Private` contains information on whether or not the institution (represented as a row in the dataset) is a private institution or not. The possible values are either "yes" or "no". Ideally, we would receive this information through a `data dictionary` that was associated with the `College` dataset, but in general we may not necessarily know all of the information about a particular dataset or variable. However, since we know about the variable, we can appropriately treat it as a `factor`.
 
 -   a **factor** is a categorical variable that contains `levels`. For example, we might have `color` as a variable in our dataset, and the levels my be `red`, `orange`, `yellow`...
 
@@ -69,7 +69,7 @@ College$Private <- as.factor(College$Private)
 
 **📊 Task 1.9**
 
-1)  In the code below, run the `summary()` function on the variable `Private` from the `College` dataset and in the space below the code, comment on the output and what you think the summary function returns when applied to factor variables.
+1)  In the code below, run the `summary()` function on the variable `Private` from the `College` dataset, and in the space below the code, comment on the output and what you think the summary function returns when applied to factor variables.
 
 ```{r}
 #[Your code and comments go in this code chunk]
@@ -91,7 +91,7 @@ College$Private <- as.factor(College$Private)
 
 -   We can also use bracket notation to get a data subset of interest.
 -   Let's use this method to get three columns of interest, consisting only of institutions labeled as private.
--   NOTE: Read the code comments (as you have done so far, for more details)
+-   NOTE: Read the code comments (as you have done so far) for more details
 
 **Step 1**
 
@@ -179,7 +179,7 @@ summary(College_subset3)
 
 2)  In the code chunk below, use any method of preference (base R or dplyr functions) to find a subset of the College dataset that seems interesting to you.
 
--   Run a summary on the data.
+-   Run a summary on your subset.
 -   In the space below your code, describe what you were aiming to do and how you accomplished it through your code (NOTE: add code explanations with comments).
 
 ```{r}
@@ -191,23 +191,23 @@ summary(College_subset3)
 
 ## Project Step 1
 
--   **Either individually, or in a group of up to 3**
+-   **Either individually, or in a group of up to 3...**
 
--   **Create a new Quarto document entitled "Project_s1_[unityID(s)]"**
+-   **Create a new Quarto document entitled "Project_s1\_\[unityID(s)\]"**
 
 1)  Find a dataset
 
-- Dataset Criteria
-    - At least 200 observations and 5 variables
-    - at least one variable of quantitative type and at least one variable of categorical type (NOTE: you can create new variables, e.g., categorizing scores into "high," "medium," and "low").
-    - 
-  
+-   Dataset Criteria
+    -   At least 200 observations and 5 variables
+    -   at least one variable of quantitative type and at least one variable of categorical type (NOTE: you can create new variables, e.g., categorizing quatitative "scores" into "high," "medium," and "low").
+
 2)  In your `Project_s1` document: Describe why you chose the dataset, and why it is relevant and/or of interest to you.
-    -   Describe what you already know about the context from which the data arises? Or what you would like to know.
+    -   Describe what you already know about the context from which the data arises, or what you would like to know.
 
 -   Explore metadata and basic summaries (with code and related comments)
+    -   You can use the functions we've covered and others
 
-2)  Build your data dictionary.
+2)  Build your data dictionary that should include:
 
 -   source of data
 -   description of data
@@ -225,7 +225,12 @@ summary(College_subset3)
 
 ## Resources
 
-[Base R Cheatsheet](https://iqss.github.io/dss-workshops/R/Rintro/base-r-cheat-sheet.pdf) [Data Wrangling Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
+-   [Base R Cheatsheet](https://iqss.github.io/dss-workshops/R/Rintro/base-r-cheat-sheet.pdf)
+
+```{=html}
+<!-- -->
+```
+-   [Data Wrangling Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
 **Dataset Options**
 

@@ -227,9 +227,8 @@ summary(College_subset3)
 
 -   [Base R Cheatsheet](https://iqss.github.io/dss-workshops/R/Rintro/base-r-cheat-sheet.pdf)
 
-```{=html}
 <!-- -->
-```
+
 -   [Data Wrangling Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
 **Dataset Options**

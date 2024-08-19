@@ -1,0 +1,430 @@
+---
+title: "Visualization with ggplot2"
+author: David J. Stokes | Teaching Coordinator | Data Science Academy
+format: 
+  html:
+    theme: cerulean
+    toc: true
+editor: visual
+---
+
+# Visualizations with ggplot2
+
+-   Before we begin creating visualizations with ggplot2, it is useful to know that it is sometimes necessary to reformat data in order to make a visualization of interest.
+
+-   Lets start by reading in some data and defining a visualization goal. Then, we will modify our data so that we can create the visualization of interest using the `ggplot2` package.
+
+## ggplot2
+
+-   Use of the ggplot2 package for visualizations is fairly ubiquitous among R users. The syntax facilitates building customizable graphs through layers. Groups and other aesthetic features can be easily added to ggplot2 visualizations. Furthermore, there is a lot of easily accessible and highly useful documentation that can be referenced (e.g., [ggplot2 cheat sheet](https://rstudio.github.io/cheatsheets/html/data-visualization.html))
+
+-   Below we will load ggplot2 into our environment and also load in the `Fish6Species.csv` dataset (and run our previous code to drop the unnecessary columns).
+
+```{r, message=FALSE}
+library(dplyr)
+library(tidyr)
+library(readr) #in the tidyverse
+library(ggplot2) #in the tidyverse
+library(purrr) #in the tidyverse
+
+Fish6Species <- read_csv("Fish6Species.csv")
+
+# Fish6Species <-
+#   Fish6Species %>%
+#   select(-`...1`,-X)
+
+# Let's switch it up and use base R
+# and instead of dropping the first to columns e.g., -c(1,2), 
+# lets keep only columns 3 to 12 to get the same subset.
+# NOTE: I had to look at the column names to find the 
+# correct indices.
+
+Fish6Species <- Fish6Species[,c(3:12)]
+
+```
+
+## Specifying a data investigation of interest
+
+-   Suppose your dataset contains `repeated measures` like measures on the same fish species over time (NOTE: not all of the measures are actual fish, so this data is better represented by the title `marine species`). Our goal is to observe certain changes over time with respect to the sample of marine species in our dataset. Once such graph that can help to visulize quantitative meansures/trends over time it is a `spaghetti plot`.
+
+-   Now, suppose we wanted to look at how the species' depths were changing over time. One such question that we might be interested in is:
+
+-   *In what way are the marine species' average depths changing over time?*
+
+-   Having just looked at the Rising Global Temperatures graph, we might hypothesize that marine species are moving deeper overtime, regardless of region, due to increases in global temperature and colder waters being at lower depths.
+
+-   To gain (informal) insight into our question of interest, knowing that the data contains the information we need to answer the question, we could attempt to visualize the marine species' average depths over time.
+
+-   However, we should confirm this by taking a closer look at the data...
+
+**📊 Task 2.7**
+
+1)  In the code chunk below, take a look the `Fish6Species` data so that you can answer the following question:
+
+-   What are some things we may need to do with the data to visualize the marine species' average depths over time?
+
+```{r}
+# HINT: Keep in mind the measurement we'd like to obtain 
+# for each of the species. Perhaps try subsetting the data
+# to look at the depth measurements for a particular species, 
+# within a given year and consider: what do we need to do for
+# those values for that particular species in that 
+# particular year?
+
+# [Your code and comments go in this code chunk]
+```
+
+**\[Your answer goes here\]**
+
+## Preparing Data for Visualizations
+
+-   The `Fish6Species` data has multiple entries per year across the various regions. So, if region is not a factor that we want to consider in our average calculation, we can find a way to calculate the average depth across the multiple entries per year.
+
+-   We want to create a visualization that shows the depth trends of the fish species across the years represented in the data. So, we need:
+
+    -   the mean values of each species for each year
+    -   the year information, and
+    -   the species information, all in one dataset
+
+-   There are many ways to do this, but let's try the following method to accomplish our task.
+
+## Building Functions
+
+-   One useful way to build functions is to create a test case, then identify the parts that are common to each case, and the inputs that will change across cases (the function inputs)
+
+-   Let's start with calculating the information we want to obtain for a subset of the data, using dplyr in the tidyverse.
+
+```{r}
+########## Test Case ############################
+# First let's create a subset of the lobster data
+lobster <-
+  Fish6Species %>%
+  mutate(Year = as.factor(Year)) %>% # covert Year to a factor
+  filter(Common.Name=="American lobster") #get the subset of interest
+
+# Now lets create a vector of years in which the lobster 
+# observations appear
+Year_L <- 
+  lobster %>%
+  distinct(Year) %>%  #get the unique values
+  arrange(Year) %>%    
+  pull(Year)  # make Year_L a vector (vs. a tibble)
+
+# Now let's compute the average depth of lobsters for each of the years
+AvgDpth_L <- 
+  lobster %>%
+  filter(Year %in% Year_L) %>% # Year_L computed above
+  group_by(Year) %>%                  
+  summarize(AvgDpth = mean(Depth, na.rm = TRUE)) %>%  
+  pull(AvgDpth)        
+
+# combine the data into one dataset
+AvgDpth_Year_L <- tibble(
+  Year = Year_L, 
+  AverageDepth = AvgDpth_L, 
+  Fish = "lobster")
+#####################################################
+```
+
+-   Now that we've successfully completed the task for the lobster species, let's observe the steps we took and see how we could make this work for the additional species (without duplicating all of the code for each of species)
+
+-   Good news! It looks like the only thing in our test case that is specific to the lobster species (and not accounted for in the functions is `Common.Name`). Otherwise, we would just need to specify the entire dataset including all of the information and we should be good to go!
+
+```{r}
+
+############# generalize w a function ###############
+# levels(as.factor(Fish6Species$Common.Name))
+# [1] "American lobster"     "Banded drum"          
+# "Black sea bass"       "Guachanche barracuda"
+# [5] "Rainbow star"         "Red hake" 
+
+grphFish <- function(dat,CN) # function to repeat the above
+  { #Note, the inputs are dat=dataset, and CN=Common.Name
+  A <-
+    dat %>%
+    mutate(Year = as.factor(Year)) %>% 
+    filter(Common.Name==CN) 
+  
+  Y <- 
+    A %>%
+    distinct(Year) %>%  
+    arrange(Year) %>%    
+    pull(Year)  
+  
+  ADL <- 
+    A %>%
+    filter(Year %in% Y) %>% 
+    group_by(Year) %>%                  
+    summarize(AvgDpth = mean(Depth, na.rm = TRUE)) %>%  
+    pull(AvgDpth)        
+  
+  M <- tibble(
+    Year = Y, 
+    AverageDepth = ADL, 
+    Fish = CN)
+  
+  return(M)
+}
+```
+
+-   Ok, so we've built our function. Let's do a quick test.
+
+```{r}
+
+grphFish(Fish6Species,"Black sea bass")
+# works!
+```
+
+-   Ok, so now that we've built a working function, let's apply it to our various species. Again, though, since we don't want to duplicate code, let's create a way to apply the function to each common name. Let's use a `for loop`!
+
+```{r}
+
+### for loop
+#lets make a variable that has each common name
+lvls <- levels(as.factor(Fish6Species$Common.Name))
+
+A <- list() # creating an empty list for later use
+            # (e.g., storing our tibbles)
+
+for(i in 1:length(lvls))
+{
+  A[[i]] <- grphFish(Fish6Species,lvls[i])
+}
+
+## Here we're using a function from the purrr package
+## that converts our list of tibbles into one tibble
+AvgDpth_Year <- 
+  A %>% 
+  map_df(identity)
+## map_df(identity) iterates over each data frame in 
+## the list and combines them by rows as they are
+
+```
+
+-   NOTE: Creating functions isn't always the most efficient way to accomplish a task in terms of time. Sometimes copying, pasting, and replacing can be used and may require less thought. Also, the function we created was specific to this dataset, so it's not very useful for anything structured a different way.
+
+-   However, below is a useful function that can work on any dataset we may import.
+
+## An example of a more general function
+
+```{r}
+
+## just an easy function to get useful information
+## from the functions that I use regularly with
+## new datasets
+
+bscInfo <- function(x)
+{
+  # x is the dataset
+  # desc is a character description wrapped in quotes
+  d <- dim(x)
+  nms <- colnames(x)
+  srm <- summary(x)
+  prv <- head(x)
+  
+  return(
+    list("data dimensions" = d,
+         "variable names" = nms,
+         "variable summary"= srm,
+         "data preview" = prv)
+  )
+}
+
+```
+
+-   Ok, so now that we've seen the nice tidyverse version, let's look at the (not so visually nice) base R version that just replicates code.
+
+-   NOTE: There are some useful functions in this code worth noting and we can go through it and note where they appear.
+
+```{r,echo=FALSE ,warning=FALSE}
+##Lets look at the lobster subset and average over the latitude measure per year
+lobster <- Fish6Species[Fish6Species$Common.Name=="American lobster",]
+lobster$Year <- as.factor(lobster$Year)
+Year_L <- levels(as.factor(lobster$Year))
+AvgDpth_L <- vector()
+
+## Sea Bass
+SeaBass <- Fish6Species[Fish6Species$Common.Name=="Black sea bass",]
+SeaBass$Year <- as.factor(SeaBass$Year)
+Year_SB <- levels(as.factor(SeaBass$Year))
+AvgDpth_SB <- vector()
+
+## Red Hake
+RedHake <- Fish6Species[Fish6Species$Common.Name=="Red hake",]
+RedHake$Year <- as.factor(RedHake$Year)
+Year_H <- levels(as.factor(RedHake$Year))
+AvgDpth_H <- vector()
+
+for(i in 1:length(Year_L))
+{
+  AvgDpth_L[i] = mean(na.omit(lobster$Depth[lobster$Year %in% Year_L[i]]))
+}
+
+for(i in 1:length(Year_SB))
+{
+  AvgDpth_SB[i] = mean(na.omit(SeaBass$Depth[SeaBass$Year %in% Year_SB[i]]))
+}
+
+for(i in 1:length(Year_H))
+{
+  AvgDpth_H[i] = mean(na.omit(RedHake$Depth[RedHake$Year %in% Year_H[i]]))
+}
+
+AvgDpth_Year_L <- cbind.data.frame(Year_L,AvgDpth_L, rep("lobster",length(AvgDpth_L)))
+colnames(AvgDpth_Year_L) <- c("Year","AverageDepth","Fish")
+
+AvgDpth_Year_SB <- cbind.data.frame(Year_SB,AvgDpth_SB, rep("Black sea bass",length(AvgDpth_SB)))
+colnames(AvgDpth_Year_SB) <- c("Year","AverageDepth","Fish")
+
+AvgDpth_Year_H <- cbind.data.frame(Year_H,AvgDpth_H, rep("Red Hake",length(AvgDpth_H)))
+colnames(AvgDpth_Year_H) <- c("Year","AverageDepth","Fish")
+
+AvgDpth_Year <- rbind.data.frame(AvgDpth_Year_L,AvgDpth_Year_SB, AvgDpth_Year_H)
+```
+
+-   That seems like a lot more work, but again, copying, pasting, replacing may be worth it in terms of time vs. thinking about how to build a function that only applies to one dataset.
+
+## The graph of our labor
+
+-   We were able to create the dataset with the structure that we wanted. Now, we will use it in the graph below, which will also give insight into why we need the information reformatted in this way.
+
+-   Let's run the code below and we can also discuss the lines in the ggplot graph.
+
+```{r, message=FALSE, warning=FALSE}
+## Lets plot average depth over time
+SpagPlot <- 
+  ggplot(data=AvgDpth_Year, aes(x=Year, y=AverageDepth, 
+                             group=Fish, color=Fish)) +
+  geom_point() +
+  geom_line() +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+SpagPlot
+```
+
+**📊 Task 2.8**
+
+1)  Interpret the visualization. What do you notice and/or what strikes you as interesting about the visualization? Does it align with what you expected?
+
+**\[Your answer goes here\]**
+
+## Facet Wrapping
+
+-   A useful feature that can be added to ggplot2 graphs is the `facet_wrap`. This allows you to view subsets of the data in different windows based on the criteria you specify.
+-   Let's see what adding the facet wrapping does to our graph when we do this with respect to the `Fish` variable.
+
+```{r, message=FALSE ,warning=FALSE}
+facetPlot <- ggplot(data=AvgLat_Year, aes(x=Year, y=AverageDepth,color=Fish)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Fish) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size=3))
+facetPlot
+```
+
+-   So, we've seen a few useful ways to create visualizations, but there are all types of other graphs that can be made and customized with ggplot2. These include boxplots, scatterplots with overlays, mosaic plots, and more (see the corresponding cheatsheet for more information).
+
+## Additional Activities
+
+**📊 Task 2.9 (Optional)**
+
+-   Below, M.dat is a made up dataset
+
+1)  Run the two code chunks below to load the object/datasets into the environment and display their format.
+
+```{r, warning=FALSE, message=FALSE}
+Mdat <- read_csv("Mdat.csv")
+Mdat
+```
+
+-   Our goal is to transform M.dat so that the data is reformatted into the following (long) structure seen in `Mdat_long` (run the code below and look at the output to compare with `Mdat`, the wide version)
+
+```{r}
+Mdat_long <- read_csv("Mdat_long.csv")
+Mdat_long
+```
+
+2)  In the code chunk below, either write your own for loop (that can be done in many different ways), or find information on the pivot_longer() function and use that to transform the wide structure of Mdat into the long structure of Mdat_long.
+    -   Data may come in wide formats, and a task such as transforming the data into long format might be necessary and/or useful for graphing, or for using the data to run a repeated measures model, for example.
+
+```{r}
+# try a for loop, or
+# try pivot_longer()
+
+#[Your code and comments go here]
+
+```
+
+## Fixing the Mosaic Plot
+
+```{r, message=FALSE, warning=FALSE}
+library(ggmosaic) # you may need to install this
+# if so, comment out the line above and 
+# uncomment the two lines below and run
+  # install.packages("ggmosaic")
+  # library(ggmosaic)
+# works like other ggplot2 graphs
+
+#species & region
+
+ggplot(data = Fish6Species) +
+  geom_mosaic(aes(x = product(Common.Name,Region), fill=Common.Name)) +
+  labs(title = "Marine Species by Region",
+       x = "Region",
+       fill = "Common Name") +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+        legend.position = "top")
+
+## In the theme we removed the y axis labels and title
+## and we adjusted the x axis labels to be at a 45 degree angle
+## NOTE: the hjust=1 makes the end of the label align with the tick
+## Lastly, we moved the Common Name key to the top of the graph
+```
+
+**📊 Task 2.10**
+
+1)  In the space below, interpret the new mosiac plot.
+
+**\[Your answer goes here\]**
+
+**📊 Task 2.11**
+
+1)  With your chosen project dataset:
+
+-   Create at least two visualizations.
+
+-   Describe why you chose those visualizations.
+
+-   Interpret the visualizations (i.e., what do they mean or indicate)
+
+-   **Use the space below to create your code chunks, code, comments and explanations**
+
+```{r}
+
+```
+
+## Project Part 2
+
+-   Return to your project document ("Project_s1\_\[unityID(s)\]")
+-   Create a new section and begin the following:
+
+1)  Create quantitative data investigation question(s).
+    -   Specify a question that is answerable from your data.
+    -   Formulate a question that is not yes or no and requires more than a basic summary or single point calculation.
+        -   Good Example: Does the depth of marine species depend on region and/or year?
+        -   Bad Example: Whats the maximum temperature deviation from the 1880-2018 average?
+2)  Develop an hypothesis or statement about something(s) you think you might find with respect to your question of interest.
+
+-   *where useful/appropriate generate visualizations to begin your investigation into your question*
+
+## What's Next
+
+-   Some basic ML models
+
+| 
+| 
+| 
+| 

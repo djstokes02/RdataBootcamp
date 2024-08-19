@@ -1,0 +1,263 @@
+---
+title: "Data Bootcamp - Prediction"
+author: David J. Stokes | Teaching Coordinator | Data Science Academy
+format: 
+  html:
+    theme: cerulean
+    toc: true
+editor: visual
+---
+
+```{r, message=FALSE, echo=FALSE}
+library(tidyverse)
+source("RBCfunctions.R") #reads in info. from another source
+```
+
+# Typical Concepts
+
+Machine learning (ML) tasks are often grouped into a `Supervised Learning` & `Unsupervised Learning` dichotomy. However, there is also semi-supervised learning and other classifications as well. For today, we will focus on the first two categories mentioned.
+
+**Supervised Learning** means that the model is built using known outcome information. For example, if your goal is to predict status based on a set of features, your model would be trained on feature information attached to known statuses.
+
+-   In the supervised learning setting, many times the goals of a particular modeling endeavor are for the purposes of `prediction` or `classification`. As with the general ML categories, there are other modeling goals within supervised learning, but we will focus on the two goals mentioned here.
+
+**Unsupervised Learning** means that the outcome is unknown. The goal, here, may be to find patterns or groupings in data. For example, you may have a set of features and be interested in how many discernable groups may be present (without having information on what those groups are).
+
+-   As indicated in the example, goals of unsupervised learning may include finding clusters or groupings, and reducing or simplifying data. We will consider these methods today.
+
+**Other Important Ideas** In machine learning settings and in the supervised learning setting in particular the modeling process often involves using a porting of the available data as `training data` and other parts of the data as `testing data`. This practice is designed to mitigate model over fitting, to test generalizability and to select model features such as `tuning parameters` (parameters derived outside of the model itself).
+
+-   There are many more key concepts in machine learning but we will limit our exploration today to the concepts mentioned above.
+
+## Training Data & Testing Data
+
+-   We mentioned the purpose of splitting data into training and test sets. There are many ways this can be done from splitting your data into fractions to iterating through data, running and testing a model fit to all but one observation. These methods of splitting up data to train and test models is oftern referred to as `k-fold cross-validation`. In fact, the value of `k` is an example of a `tuning parameter` that can influence the model.
+
+-   For today, we will consider `2-fold cross-validation`, when possible, and split the data into two equal parts.
+
+-   So, without further adieu, let's get to machine learnin'.
+
+## Linear Regression
+
+-   💬 How many of you are familiar with linear regression? In what contexts have you applied linear regression (e.g., what was the data type or dataset, what was the question of interest or purpose of using this method? Was it useful and what did you learn from the process?)
+
+### What's it all about?
+
+**Uses**
+
+Linear regression can be used for visualizing trend lines, predicting values of an outcome based on model characteristics/features, forecasting, planning and more. In fact, linear regression can even be used for classification.
+
+**Exploring Linear Regression in R**
+
+The advertising dataset consists of four variables that represent advertising expenditure on TV, radio, and newspaper (in thousands of dollars) and the corresponding sales (in thousands of units). Let's take a look...
+
+```{r, message = FALSE, echo = FALSE}
+
+## loading in the data
+Advertising <- read_csv("Advertising.csv")
+
+## getting rid of first column of indexes (we don't need them)
+Advertising <- Advertising[,-1]
+
+## let's use our bscInfo() function to get some summary info
+bscInfo(Advertising)
+
+```
+
+**LR model syntax in R**
+
+-   We've done the hard part, the data is processed and prepared for analysis! (let's assume this is true, since we've put in the time, albeit on other datasets, yesterday).
+-   Actually there may be validation steps to take prior, such as data quality checks, but we will proceed with the data as is. For more information see ([ISLR](https://www.statlearning.com/)).
+
+> Function `lm()`
+
+> Model Specification `outcome ~ predictor1 + predictor2 + ... predictorN`
+
+```{r, echo=FALSE}
+# specifying the individual vars of interest 
+# g <- lm(sales ~ TV + radio + newspaper, data = Advertising)
+
+# quicker way since we're using all of the variables to predict sales
+advert_linreg <- lm(sales~.,data=Advertising)
+
+# summary of the model
+summary(advert_linreg)
+```
+
+-   The `summary()` function turns out to be extremely useful and flexible, and the output that it gives depends on the object that goes in as the input. In the case of most models the summary function returns statistical summaries of parameter estimates, measures of fit and other useful information. In fact, you can store the model output as an object and extract certain information from
+
+-   **📊 Task 3.1**
+
+In the code chunk below:
+
+1)  Rerun the summary function on the advert_linreg model and save the results in a object named `linreg_mod_res`. Use the extract (`$`) operator to get the residuals from the model summary object (`linreg_mod_res`), and save this as a new object names `res`.
+
+    -   NOTE: In order to rely on the model output (e.g., p-value information), we'd want to check model assumptions. One of these assumptions is that the errors are normally distributed (around zero). Since the residuals are a proxy for the errors, we can get an idea about this assumption using these values.
+
+2)  Next, use the `hist()` function on the object `res` and describe what you see. Also try the `boxplot()` function and running the `summary()` function again on `res`.
+
+3)  With the above assumption in mind, below your code describe your thoughts about the visual generated from the `hist()` and `boxplot()` functions and the information from the `summary()` function applied to `res` (e.g., do you have any concerns and why?).
+
+```{r}
+
+# [Your code and comments go here]
+
+```
+
+**\[Your answer goes here\]**
+
+### What else can we do?
+
+-   Now let's say we want to see how well our advertising model predicts sales. To do this with linear regression and evaluate the model, we don't necessarily have to make statistical assumption about the errors.
+
+-   Let's try using our (2 fold) cross validation concept to split the data and predict each half with a model trained on the other.
+
+-   For this, as a measure of fit, we may want to compute the model mean squared error (`MSE`), which is the the mean of the sum of the squared differences between the observed values and the predicted values: $\Sigma\frac{(y_i - \widehat{y}_i)^2}{n_i}$.
+
+-   *In the code below, we will split the data into two part, a training dataset and a testing dataset. Then we will run the model on the training set and use the `predict()` function to get the results of the prediction on the testing data. Next, we will compute the MSE, then switch the training and testing sets, repeat the process, and then compute the average RMSE (RMSE_1 + RMSE_2)/2*
+
+```{r}
+set.seed(2) #makes results replicable, gives same random numbers
+k <- nrow(Advertising)/2 #splits evenly 200 obs.
+
+split_indx <- sample(1:nrow(Advertising), size = k) 
+#gets a "random" sample of dataset indices of size k
+
+trainSet_A <- Advertising[split_indx,]
+# keep rows in split_indx
+
+testSet_A <- Advertising[-split_indx,]
+# drop rows in split_indx
+
+Mod_A <- lm(sales~.,data=trainSet_A)
+# model from training set A
+
+predicted_sales_A <- predict(Mod_A, newdata = testSet_A)
+# predicted values for test set A from model A
+
+actual_sales_A <- testSet_A$sales
+# actual values
+
+residuals_A <- (actual_sales_A - predicted_sales_A)
+# residuals (actual - predicted)
+
+SS_residuals_A <- residuals_A %*% residuals_A
+# sum of squared residuals
+# NOTE the %*% operator is the cross product
+
+MSE_A <- SS_residuals_A/k
+# average of the sum of squared residuals
+
+RMSE_A <- sqrt(MSE_A)
+# square root of MSE
+
+####### Switch and repeat ########
+
+trainSet_B <- Advertising[-split_indx,]
+testSet_B <- Advertising[split_indx,]
+Mod_B <- lm(sales~.,data=trainSet_B)
+predicted_sales_B <- predict(Mod_B, newdata = testSet_B)
+actual_sales_B <- testSet_B$sales
+residuals_B <- (actual_sales_B - predicted_sales_B)
+SS_residuals_B <- residuals_B %*% residuals_B
+MSE_B <- SS_residuals_B/k
+RMSE_B <- sqrt(MSE_B)
+
+######### average RMSE ##########
+
+RMSE_avg <- (RMSE_A + RMSE_B)/2
+RMSE_avg
+
+```
+
+-   **📊 Task 3.2**
+
+1)  Analyze the code above.
+    -   In the code chunk below, create a function that will return RMSE given a model and a testing dataset.
+2)  Run your function on the advertising dataset with the linear model.
+
+```{r}
+#[Your code goes here]
+
+```
+
+-   Suppose we think we can do better than the linear model at predicting sales, and we want a model that is just as interpretable, if not more so. Then, we might as well check out regression Trees.
+
+## Regression Trees
+
+Unlike linear regression, regression trees don't assume linearity and don't require normality for inference.
+
+> Function `rpart()`
+
+> Model Specification `outcome ~ predictor1 + predictor2 + ... predictorN`
+
+```{r}
+library(rpart)
+library(rpart.plot)
+
+advert_tree <- rpart(sales~., data = Advertising,
+                     method = "anova")
+```
+
+-   Let's visualize our model using the rpart.plot function
+
+```{r}
+rpart.plot(advert_tree)
+```
+
+-   **📊 Task 3.3**
+
+1)  In the apce below answer: Does the visual output make sense to you? If so, interpret the output in the visualization. If not, why not?
+
+**\[Your answer goes here\]**
+
+-   Since we put some time into creating out training and testing dat, we can reuse them with our regression tree and observe the average RMSE values to gain insight into which one may be predicting sales better.
+
+```{r}
+## lets just overwrite Mod A and Mod_B here to make things easier.
+## The only thing that needs to change is the model
+
+Mod_A <- rpart(sales~.,data=trainSet_A)
+predicted_sales_A <- predict(Mod_A, newdata = testSet_A)
+actual_sales_A <- testSet_A$sales
+residuals_A <- (actual_sales_A - predicted_sales_A)
+SS_residuals_A <- residuals_A %*% residuals_A
+MSE_A <- SS_residuals_A/k
+RMSE_A <- sqrt(MSE_A)
+
+Mod_B <- rpart(sales~.,data=trainSet_B)
+predicted_sales_B <- predict(Mod_B, newdata = testSet_B)
+actual_sales_B <- testSet_B$sales
+residuals_B <- (actual_sales_B - predicted_sales_B)
+SS_residuals_B <- residuals_B %*% residuals_B
+MSE_B <- SS_residuals_B/k
+RMSE_B <- sqrt(MSE_B)
+
+RMSE_avg_tree <- (RMSE_A + RMSE_B)/2
+
+cbind.data.frame("LM RMSE" = RMSE_avg, "Tree RMSE" = RMSE_avg_tree)
+```
+
+-   So it looks like the linear model does a bit better than the tree method at predicting sales based on the comparison on average RMSE for the too models.
+
+-   **📊 Task 3.4**
+
+1)  Run the code below to load the `College` dataset and see more information in the Help window.
+
+```{r, message = FALSE, warning=FALSE}
+library(ISLR2)
+College <- read_csv("College.csv")
+?College
+```
+
+2)  In the code chunk below, explore the `College` dataset and specify a linear regression model and a regression tree model of interest with prediction in mind. For example, let's say you want to predict graduation rate from expenditure, student/faculty ration, etc...
+    -   Note that all of the quantitative variables should be greater than zero. So, you can consider transforming the variable you'd like to predict to the `log` scale (e.g., predict log(y) and the back transform the values using the `exp()` function on the predicted values).
+    -   Use resources to consider metrics to evaluate the models with respect to which one you might recommend.
+
+```{r}
+## [Your code and comments go here]
+```
+
+3)  In the space below your code, describe which model appears to be better for the predictions you'd like to obtain.
+
+**\[Your answer goes here\]**

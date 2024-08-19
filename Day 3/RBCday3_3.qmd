@@ -1,0 +1,113 @@
+---
+title: "Data Bootcamp - Unsupervised"
+author: David J. Stokes | Teaching Coordinator | Data Science Academy
+format: 
+  html:
+    theme: cerulean
+    toc: true
+editor: visual
+---
+
+```{r, message=FALSE}
+library(tidyverse)
+library(psych)
+library(NbClust)
+library(factoextra)
+source("RBCfunctions.R")
+```
+
+# Unsupervised Learning
+
+-   The `Teachers` data consists of a sample of over 300 AP statistics teachers' responses to a survey from Fall, 2018. These teachers were teaching AP Statistics at the time of the survey. The data consists of seven survey items from a `Pedagogy` section, and 18 survey items from a `Beliefs` section. Each of the survey items contain responses on a 6 point likert-scale (1 = strongly disagree ... 6 = strongly agree) designed to measure the intensity of teachers' beliefs and practices.
+
+-   Suppose we want to investigate the following questions:
+
+1)  What is the underlying structure of teachers' beliefs and actions?
+
+2)  Can we identify certain groups of teachers based on what they believe and do?
+
+-   For the most part, these questions are suited to unsupervised methods and the Teacher dataset doesn't have a particular response. So, we would likely benefit from unsupervised methodology in attempting to address these questions.
+
+-   Let's read in teh data, and try our bsc_Info function too.
+
+```{r, message=FALSE}
+
+Teachers <- read_csv("Teachers.csv")
+bscInfo(Teachers)
+
+```
+
+## Factor Analysis
+
+-   Exploratory factor analysis is a method that can be used to gain insight into underlying or latent structures within data. Methods like principal component analysis can be used as a data reduction technique. For example, you can compute the linear combinations of the full dataset that explain the variation in the data and use those components for another purpose vs. a full dataset of variables that may be otherwise well represented in the smaller dimension.
+
+-   Let's run the code below to see the questions that were asked as a guide for interpretation.
+
+```{r}
+G <- colnames(Teachers) #save the names of the qs
+G
+```
+
+**💬 Task 3.6**
+
+1)  Take a look at the questions, at first individually, and then discuss with your neighbor any patterns that you think might arise, if any, given the questions asked in the survey and the questions under consideration.
+
+-   Before we create our factor model, let's use `parallel analysis` to help with selecting the `tuning parameter` which in this case is the number of factors. This method compares the observed data variation explained by the number of factors to the average of variation explained by randomly generated datasets of the same size.
+
+```{r}
+## Parallel Analysis
+## Method to find out how many factors to keep
+fa.parallel(Teachers,cor="poly",fa="fa")
+```
+
+-   Since the parallel analysis suggests 8 dimensions, let's go with that and run our factor analysis model accordingly.
+
+```{r}
+#colnames(Teachers) <- seq(1:ncol(Teachers))
+A <- fa(Teachers,cor="poly",nfactors=8)
+```
+
+-   Since we're interested in finding groupings as well.
+
+```{r}
+scrs <- A$scores
+```
+
+## Clustering
+
+-   The plot below is a visual representation of the `silhouette method` which is a measure of average distance between points within a cluster compared to average distance between points across clusters.
+
+```{r}
+## silhouette
+fviz_nbclust(scrs, kmeans, method = "silhouette")
+```
+
+-   We can see that the maximum occurs at 2, so let's use this criteria for our model, and subsequently visualize our clusters.
+
+```{r}
+set.seed(2)
+k2 <- kmeans(scrs, centers=2, nstart=25)
+
+fviz_cluster(k2, data=Teachers) +
+  theme_minimal()
+```
+
+## Project part 3
+
+-   For this project step:
+
+    -   Use visualization methods and potential models that may be helpful to address your question and offer insight into trends, decisions, limitations, or next steps.
+
+    -   Give contextual interpretations of the methods you choose with respect to your data context and data investigation question of interest.
+
+    -   Describe what may be missing from the data and/or what you would add to go further in your investigation
+
+    -   Clarify some potential next steps to take if you'd like to know more about your data and/or investigation question.
+
+    -   Last project step: Summarize what you learned from the bootcamp/workshop and/or would like to know more about and what, you'll take forward from this experience and/or what else you'd like to know.
+
+## What's Next
+
+-   Finalizing/formatting your project
+
+-   Presenting your process and project!

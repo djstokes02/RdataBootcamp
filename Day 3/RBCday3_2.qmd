@@ -1,0 +1,161 @@
+---
+title: "Data Bootcamp - Classification"
+author: David J. Stokes | Teaching Coordinator | Data Science Academy
+format: 
+  html:
+    theme: cerulean
+    toc: true
+editor: visual
+---
+
+# Classification
+
+-   We will now turn to another very common goal in supervised learning, classification. In classification the goal is often to predict some categorical outcome based on known features. In this section we will focus on binary classification.
+
+-   💬 Can we use linear regression for this? What are your thoughts on this and why?
+
+    -   We can return to this in a moment.
+
+## Logistic Regression
+
+-   In logistic regression we model the mean of the log-odds as a linear function of our features/variables.
+
+-   Let's take a look at the Heart dataset, create training and test datasets logistic regression models, some predictions and evaluate how things go.
+
+> Function `glm()`
+
+> Model Specification NOTE: for a glm, you have to specify the `family =` parameter that includes distributions from the `exponential family` of distributions.
+
+```{r}
+library(tidyverse)
+library(ISLR2)
+source("RBCfunctions.R")
+
+Heart <- read_csv("Heart.csv")
+?Heart
+bscInfo(Heart,"factor")
+
+# base R recoding AHD as a factor
+# Heart$AHD <- as.factor(Heart$AHD)
+Heart <- 
+  Heart %>%
+  mutate(AHD = as.factor(AHD)) %>%
+  select(-`...1`) #tidyverse method
+
+hrt_log <- glm(AHD ~., data=Heart, family = "binomial")
+summary(hrt_log)
+
+```
+
+-   NOTE: The default for the glm is that the first level is treated as the reference (or variable that represent failure). So, we can check this by using the levels function.
+
+```{r}
+levels(Heart$AHD)
+```
+
+-   From the output it seems like the model may have some predictive power, but perhaps there are too many features and we don't need them all.
+
+-   We can select the model features that may have the most predictive power by using the `step()` function that performs model selection (forwards and backwards) based on a criteria known as Akaike Information Criterion (`AIC`). A lower AIC is an indication of a better model fit.
+
+-   Run the code below and observe the output
+
+```{r}
+## stepwise selection on our model (based on AIC)
+step(hrt_log)
+```
+
+-   Going with the stepwise selection AIC criteria, we have the following model:
+
+```{r}
+hrt.mod_reduced <- 
+  glm(AHD ~ Sex + ChestPain + RestBP + RestECG + 
+      MaxHR + ExAng + Oldpeak + Slope + Ca + Thal, 
+      family = "binomial", data = Heart)
+
+summary(hrt.mod_reduced)
+```
+
+## Linear regression for classification?
+
+-   When using linear regression for classification, because we will need to use the model predictions to make decisions, this may not be the best method (values can be outside of the \[0,1\] bounds). However, if we're going to make predictions based on a 0,1 outcome with a linear regression model, it makes sense to use 0.5 as the classification boundary/criteria.
+
+-   That is, if 1 is a success then a predicted value \> 0.5 would be categorized as a success and otherwise not a success.
+
+-   Below, let's take a look at a made up dataset to compare the misclassification rates of a linear regression model with that of a logistic regression model.
+
+```{r, message=FALSE, warning=FALSE}
+
+## linear regression classification
+set.seed(2)
+logRegdat <- read_csv("logRegdat.csv")
+
+bscInfo(logRegdat)
+```
+
+-   Now, let's use a method similar to how we calculated MSE to find the misclassification rate of a model that uses a linear model vs. a model that uses a generalized linear model.
+
+```{r}
+
+set.seed(2)
+## get half the data
+split_indx <- sample(1:nrow(logRegdat), size = 500)
+
+## split into testing and training
+trainSet <- logRegdat[split_indx,]
+testSet <- logRegdat[-split_indx,]
+
+## model using all other predictors
+# besides the response
+g_mod <- lm(Response ~., data=trainSet)
+
+## one line if/then statement to classify
+# The criteria is > 0.5
+P <- ifelse(predict(g_mod, newdata = testSet) > 0.5,1,0)
+
+Res <- cbind(P, testSet$Response)
+
+S <- ifelse(Res[,1] == Res[,2],1,0) 
+
+sum(S)/500 
+```
+
+-   It appears we didn't do too bad. So, let's try with the logistic regression model.
+
+#### logistic regression model
+
+```{r}
+g_mod_l <- glm(Response ~., data=trainSet, family = "binomial")
+P_log <- ifelse(predict(g_mod_l,newdata = testSet, type="response" ) > 0.5,1,0)
+Res_log <- cbind(P_log, testSet$Response)
+S_log <- ifelse(Res_log[,1] == Res_log[,2],1,0) 
+sum(S_log)/500 
+```
+
+-   Interesting! Based on this initial test, it looks like the linear model did (slightly) better with classification on the test data than the logistic regression model (based on the overall misclassification rate).
+
+**📊 Task 3.5**
+
+1)  In the code chunk below, use the `logregdat` data to complete the 2-fold cross validation process.
+    -   Switch the test and training sets, and compute the misclassification rates using both models.
+    -   Average the misclassification rates of both models and compare
+    -   Describe what you think in the space below the code.
+
+```{r}
+
+# [Your code and comments go here]
+
+```
+
+**\[Your answer goes here\]**
+
+2)  Use the testing set, training set method on the `Heart` data to compare the full model and the reduced model in terms of misclassification rate.
+    -   Use the 2-fold CV method and the average, again
+    -   Note, to get the predictions as probabilities you need to use the `type="response"` option in the `predict()` function.
+
+```{r}
+
+# [Your code and comments go here]
+
+```
+
+**\[Your answer goes here\]**

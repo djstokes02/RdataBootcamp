@@ -1,0 +1,230 @@
+---
+title: "Visualizations in Base R"
+author: David J. Stokes | Teaching Coordinator | Data Science Academy
+format: 
+  html:
+    theme: cerulean
+    toc: true
+editor: visual
+---
+
+# Visualizations in (base) R
+
+## Review
+
+-   Let's recall concepts from Day 1
+
+-   💬 Take 5 minutes: Find a neighbor and discuss concepts from yesterday that you learned or were able to review. Please consider:
+
+    -   Did you find anything insightful?
+    -   Are there any concepts that you'd want more application context for?
+    -   Discuss the dataset that you chose with your partner and how your data dictionary development is going.
+
+-   After discussing with your neighbor, please consider sharing some thoughts with the entire group.
+
+## Today
+
+-   Today, you will be able to
+    -   Prepare data for visualizations
+        -   write user-defined functions
+    -   Use ggplot2 for data visualizations
+    -   Develop a data investigation/research question of interest
+        -   in consideration of the data you have chosen
+-   Ok, let's get started...
+
+**📊 Task 2.1**
+
+-   Run the code below to load the needed R packages
+
+```{r, message=FALSE}
+## loading required packages 
+
+library(tidyverse) 
+
+# includes ggplot2, dplyr, and readr [e.g., library(ggplot2); library(dplyr); library(readr)]
+
+```
+
+**📊 Task 2.2**
+
+-   Run the code below to load in the datasets of interest
+-   NOTE: You may need to change your filepath or set your `working directory`
+
+```{r, message=FALSE}
+
+Fish6Species <- read_csv("Fish6Species.csv")
+RisingGlobalTemp <- read_csv("RisingGlobalTemp.csv")
+
+```
+
+## Investigations and Visualizations (base R)
+
+*Rising Global Temperatures dataset*
+
+-   This dataset has 3 variables (note the first column is just an index, again). The "gistemp" variable represents average temperature differences from the 1986-2005 average, for each year from 1880 to 2018. "year" represents the year in which the temperatures were taken. For example, a measurement of 0.5 for a given year would represent an average temperature of 0.5 degrees Celsius warmer than the average temperature from 1986-2005.
+
+### The basic plot function
+
+-   The R base plot function is pretty powerful. The syntax is simple and the defaults can be useful in visualizing trends.
+
+-   Let's take a look at the basic plot function for the quantitative variables in the Rising Global Temperatures (`RisingGlobalTemp`) dataset.
+
+Let's look at the column names so that we can grab the variables of interest by name.
+
+```{r}
+## run this to get the column names
+colnames(RisingGlobalTemp)
+```
+
+-   ❓ What will happen if we use the basic plot function on one *quantitative* variable? (Also...recall the Dataset\$Variable syntax).
+
+```{r}
+plot(RisingGlobalTemp$gistemp) #scatterplot (by index)
+```
+
+-   ❓ What about for two quantitative variables?
+
+```{r}
+plot(x = RisingGlobalTemp$year, y = RisingGlobalTemp$gistemp) # bivariate plot
+```
+
+**📊 Task 2.3**
+
+1)  In the space below, describe the difference between the one variable plot and two variable plot.
+
+**\[Your answer goes here\]**
+
+-   ❓ What else can we add to the base plot function? (colors, overlays, linetypes... the list goes on)
+
+```{r}
+plot(RisingGlobalTemp$year,RisingGlobalTemp$gistemp, xlab="Temperature Difference",
+     ylab="Year", col="purple") # bivariate plot
+## the abline adds a horizontal line at y=0. 
+## lty changes the line type. lwd changes the line width.
+abline(h=0, col="orange", lty=3, lwd=2)
+```
+
+**📊 Task 2.4**
+
+1)  Note, there is a mistake with the axis labels in the graph above. In the codechunk below do the following:
+
+-   fix the axis labels,
+-   change the point color to red, and
+-   change the line type to a different format.
+
+```{r}
+## #[Your code and comments go in this code chunk] HINT: You may want to copy and paste the above code and modify accordingly.
+
+```
+
+2)  In the space below, describe what is happening in the graph. Use the information given about the dataset to interpret the visualization.
+    -   Do you have any hypotheses or additional information from prior knowledge about what appears in the graph?
+
+**\[Your answer goes here\]**
+
+-   ❓ What does the basic plot function do for categorical variables (i.e., what is the default output)?
+
+**Fish - Six Species dataset**
+
+-   To investigate this, let's look at the Fish - Six Species dataset (`Fish6Species`).
+
+```{r}
+## run this to get the colnames
+colnames(Fish6Species)
+```
+
+-   This dataset contains 12 variables (NOTE: the variables "...1" and "X" are just indices, so let's drop them from the dataset).
+
+```{r}
+# base R version
+# Fish6Species <- Fish6Species[,-c(1,2)] 
+
+# dplyr (tidyverse) version
+
+Fish6Species <-
+  Fish6Species %>%
+  select(-`...1`,-X)
+
+# NOTE: the minus (-) signs drop the variables from the data
+  
+```
+
+**📊 Task 2.5**
+
+1)  In the code chunk below, run a function to get the dimensions of the new Fish6Species dataset, and list the new number of variables below your code (in the code chunk) as a `comment`.
+
+```{r}
+#[Your code and comments go in this code chunk]
+
+```
+
+2)  In the code chunk below, write code to display the names of the variables.
+
+-   In the space below the code, write whether we got the data subset of interest and how you know whether we did or not.
+
+```{r}
+#[Your code and comments go in this code chunk]
+
+```
+
+**\[Your answer goes here\]**
+
+### Back to plotting
+
+-   ❓ What happens if you use the basic plot function on one *categorical* variable? (NOTE: we read the non-quantitative variables in as `characters`... so we need to change them to `factors`.
+
+```{r}
+# change the variables Species and Region into factors, and overwrite
+Fish6Species <- 
+  Fish6Species %>%
+  mutate(Species = as.factor(Species), 
+         Region = as.factor(Region))
+
+summary(Fish6Species[,2:3])
+```
+
+```{r}
+## run this to view the default output for one categorical variable
+plot(Fish6Species$Species)
+```
+
+-   💬 What are your thoughts about the display?
+
+-   ❓ Two categorical variables?
+
+```{r}
+plot(Fish6Species$Species, Fish6Species$Region) ## Mosaic plot
+```
+
+-   The default output from the base plot function for two categorical variables is a mosaic plot.
+
+-   A mosaic plot is usually very informative and can be thought of as a visual representation of a two by two frequency table. By observing mosaic plots, trends are often discernible.
+
+-   In order to make more sense out of the plot, let's look at the levels
+
+```{r}
+levels(Fish6Species$Species)
+levels(Fish6Species$Region)
+```
+
+-   Still, with this information, the mosaic plot is not very informative.
+
+-   Attempting to modify the axes and add colors to the mosaic plot is not easily done within the base R plot function. So, let's consider some other packages.
+
+**📊 Task 2.6**
+
+1)  Individually, or in collaboration with your chosen project group:
+
+-   load in your chosen dataset
+-   use the base plot function to generate at least two plots
+    -   add titles, color, and axis labels where possible
+
+```{r}
+
+#[Your code and comments go in this code chunk]
+
+```
+
+2)  In the space below, interpret the plots that you've generated.
+
+**\[Your answer goes here\]**

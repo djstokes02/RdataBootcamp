@@ -20,7 +20,7 @@ editor: visual
 
 -   In logistic regression we model the mean of the log-odds as a linear function of our features/variables.
 
--   Let's take a look at the Heart dataset, create training and test datasets logistic regression models, some predictions and evaluate how things go.
+-   Let's take a look at the Heart dataset, create training and test datasets, logistic regression models, some predictions, and evaluate how things go.
 
 > Function `glm()`
 

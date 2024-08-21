@@ -28,7 +28,7 @@ source("RBCfunctions.R")
 
 -   For the most part, these questions are suited to unsupervised methods and the Teacher dataset doesn't have a particular response. So, we would likely benefit from unsupervised methodology in attempting to address these questions.
 
--   Let's read in teh data, and try our bsc_Info function too.
+-   Let's read in the data, and try our bsc_Info function too.
 
 ```{r, message=FALSE}
 
@@ -67,9 +67,10 @@ fa.parallel(Teachers,cor="poly",fa="fa")
 A <- fa(Teachers,cor="poly",nfactors=8)
 ```
 
--   Since we're interested in finding groupings as well.
+-   Since we're interested in finding groupings as well, let's use our factor analysis model to generate scores from the interpretable factors.
 
 ```{r}
+#storing the computed factor scores for each set of observations
 scrs <- A$scores
 ```
 

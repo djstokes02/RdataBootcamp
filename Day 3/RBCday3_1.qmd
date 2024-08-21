@@ -21,7 +21,7 @@ Machine learning (ML) tasks are often grouped into a `Supervised Learning` & `Un
 
 -   In the supervised learning setting, many times the goals of a particular modeling endeavor are for the purposes of `prediction` or `classification`. As with the general ML categories, there are other modeling goals within supervised learning, but we will focus on the two goals mentioned here.
 
-**Unsupervised Learning** means that the outcome is unknown. The goal, here, may be to find patterns or groupings in data. For example, you may have a set of features and be interested in how many discernable groups may be present (without having information on what those groups are).
+**Unsupervised Learning** means that the outcome is unknown. The goal, here, may be to find patterns or groupings in data. For example, you may have a set of features and be interested in how many discernible groups may be present (without having information on what those groups are).
 
 -   As indicated in the example, goals of unsupervised learning may include finding clusters or groupings, and reducing or simplifying data. We will consider these methods today.
 
@@ -31,7 +31,7 @@ Machine learning (ML) tasks are often grouped into a `Supervised Learning` & `Un
 
 ## Training Data & Testing Data
 
--   We mentioned the purpose of splitting data into training and test sets. There are many ways this can be done from splitting your data into fractions to iterating through data, running and testing a model fit to all but one observation. These methods of splitting up data to train and test models is oftern referred to as `k-fold cross-validation`. In fact, the value of `k` is an example of a `tuning parameter` that can influence the model.
+-   We mentioned the purpose of splitting data into training and test sets. There are many ways this can be done from splitting your data into fractions to iterating through data, running and testing a model fit to all but one observation. These methods of splitting up data to train and test models is often referred to as `k-fold cross-validation`. In fact, the value of `k` is an example of a `tuning parameter` that can influence the model.
 
 -   For today, we will consider `2-fold cross-validation`, when possible, and split the data into two equal parts.
 
@@ -84,7 +84,7 @@ advert_linreg <- lm(sales~.,data=Advertising)
 summary(advert_linreg)
 ```
 
--   The `summary()` function turns out to be extremely useful and flexible, and the output that it gives depends on the object that goes in as the input. In the case of most models the summary function returns statistical summaries of parameter estimates, measures of fit and other useful information. In fact, you can store the model output as an object and extract certain information from
+-   The `summary()` function turns out to be extremely useful and flexible, and the output that it gives depends on the object that goes in as the input. In the case of most models the summary function returns statistical summaries of parameter estimates, measures of fit and other useful information. In fact, you can store the model output as an object and extract certain information from them.
 
 -   **📊 Task 3.1**
 
@@ -112,7 +112,7 @@ In the code chunk below:
 
 -   Let's try using our (2 fold) cross validation concept to split the data and predict each half with a model trained on the other.
 
--   For this, as a measure of fit, we may want to compute the model mean squared error (`MSE`), which is the the mean of the sum of the squared differences between the observed values and the predicted values: $\Sigma\frac{(y_i - \widehat{y}_i)^2}{n_i}$.
+-   For this, as a measure of fit, we may want to compute the model mean squared error (`MSE`), which is the the mean of the sum of the squared differences between the observed values and the predicted values: $\Sigma_i\frac{(y_i - \widehat{y}_i)^2}{n_j}$ (NOTE: $n_j$ represents the size of the $jth$ testing data fold.
 
 -   *In the code below, we will split the data into two part, a training dataset and a testing dataset. Then we will run the model on the training set and use the `predict()` function to get the results of the prediction on the testing data. Next, we will compute the MSE, then switch the training and testing sets, repeat the process, and then compute the average RMSE (RMSE_1 + RMSE_2)/2*
 
@@ -207,7 +207,7 @@ rpart.plot(advert_tree)
 
 -   **📊 Task 3.3**
 
-1)  In the apce below answer: Does the visual output make sense to you? If so, interpret the output in the visualization. If not, why not?
+1)  In the space below answer: Does the visual output make sense to you? If so, interpret the output in the visualization. If not, why not?
 
 **\[Your answer goes here\]**
 

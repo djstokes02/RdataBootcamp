@@ -195,7 +195,7 @@ char.mat <- matrix(c("I","I",
 
 **\[Your answer goes here\]**
 
-3)  What do you think would happen to the matrix type of `frst_mtrx` if we replaced a row in `frst_mtrx` with a row of `char.mat`? (HINT: what happened to the vector type when we added a character value to our numeric vector?)
+3)  What do you think would happen to the matrix type of `frst_mtrx` if we replaced a row in `frst_mtrx` with a row of `char.mat` (assuming they have the same dimensions)? (HINT: what happened to the vector type when we added a character value to our numeric vector?)
 
 **\[Your answer goes here\]**
 
@@ -228,7 +228,7 @@ College <- read_csv("College.csv")
 ```
 
 2)  In the code chunk below, use the `dim()` function and the `colnames()` function on the College dataset.
-    -   Run the results, and below your code describe what these functions do. (HINT: you can type `?dim`, or `?colnames` to bring up the R documentation on these functions in the Help window).
+    -   Run the results, and below your code describe what these functions do. (HINT: you can type `?dim`, or `?colnames` to bring up the R documentation on these functions in the `Help` window).
 
 ```{r}
 #[Your code and comments go in this code chunk]
@@ -237,7 +237,7 @@ College <- read_csv("College.csv")
 
 **\[Your answer goes here\]**
 
-3)  In the code chunk below use the `head()` function on the College dataset, run the code, and below your code describe the information that is given.
+3)  In the code chunk below use the `head()` function on the `College` dataset, run the code, and below your code describe the information that is given.
 
 ```{r}
 #[Your code and comments go in this code chunk]

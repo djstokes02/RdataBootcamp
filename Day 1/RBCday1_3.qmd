@@ -10,7 +10,7 @@ editor: visual
 
 ## Data Summaries & Data Processing
 
--   Let's read in the `College` dataset again. Recall, `read_csv` creates Tibbles by default.
+-   Let's read in the `College` dataset again. Recall, `read_csv` creates tibbles by default.
 
 ```{r, message=FALSE}
 library(readr) #included in the tidyverse
@@ -19,19 +19,19 @@ College <- read_csv("College.csv")
 
 ### Dataset Summaries
 
--   Base R has a useful `summary()` that we can run on Tibbles.
+-   Base R has a useful `summary()` that we can run on tibbles.
 
 ```{r}
 summary(College)
 ```
 
--   Notice that we get a `five number summary` (and the mean value) for each of the quantitative variables. However, the summary for the variable `Private` isn't very informative.
+-   Notice that we get a `five number summary` (and the mean value) for each of the quantitative variables. However, the summary for the character variable `Private` isn't very informative.
 
 ### Extracting Variables of Interest
 
 -   We previously saw that we can access rows and columns of a dataset with bracket notation `datasetName[row-subset, column-subset]`.
 
--   Another way to reference columns of a dataset (storred as a Tibble, or dataframe) is to use the `$` operator. The `$` allows you to extract or replace information in an object such as a Tibble.
+-   Another way to reference columns of a dataset (stored as a tibble, or dataframe) is to use the `$` operator. The `$` allows you to extract or replace information in an object such as a tibble.
 
 -   Let's use the `$` operator to take a closer look at the variable `Private`.
 
@@ -91,7 +91,7 @@ College$Private <- as.factor(College$Private)
 
 -   We can also use bracket notation to get a data subset of interest.
 -   Let's use this method to get three columns of interest, consisting only of institutions labeled as private.
--   NOTE: Read the code comments (as you have done so far) for more details
+-   NOTE: Read the code comments (as you have done so far) for more details.
 
 **Step 1**
 
@@ -226,9 +226,6 @@ summary(College_subset3)
 ## Resources
 
 -   [Base R Cheatsheet](https://iqss.github.io/dss-workshops/R/Rintro/base-r-cheat-sheet.pdf)
-
-<!-- -->
-
 -   [Data Wrangling Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
 **Dataset Options**
